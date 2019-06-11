@@ -5,3 +5,8 @@ set -o nounset
 
 cargo test --manifest-path=./rust/Cargo.toml
 cargo test --manifest-path=./examples/Cargo.toml
+
+./scripts/run_server_docker &
+SERVER_PID=$!
+./examples/hello_world/run
+kill -SIGINT $SERVER_PID
