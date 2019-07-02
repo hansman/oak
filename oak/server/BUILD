@@ -124,6 +124,7 @@ cc_library(
         "@com_google_asylo//asylo/grpc/util:enclave_server_cc_proto",
         "@com_google_asylo//asylo/util:logging",
         "@com_google_asylo//asylo/util:status",
+        "@v8",
     ],
 )
 

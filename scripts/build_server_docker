@@ -19,11 +19,13 @@ fi
 if [[ -f "$OAK_REMOTE_CACHE_KEY" ]]; then
     "$SCRIPTS_DIR/docker_run" bazel build \
         --remote_cache=https://storage.googleapis.com/oak-bazel-cache \
+        --verbose_failures \
         --google_credentials="$OAK_REMOTE_CACHE_KEY" \
         --config=enc-sim \
         //oak/server:oak
 else
     "$SCRIPTS_DIR/docker_run" bazel build \
         --config=enc-sim \
+        --verbose_failures \
         //oak/server:oak
 fi

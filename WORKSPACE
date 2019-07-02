@@ -82,6 +82,43 @@ git_repository(
     remote = "https://github.com/tiziano88/wabt",
 )
 
+# Chrome V8 engine.
+new_local_repository(
+  name = "v8",
+  path = "/v8",
+  build_file_content = """
+cc_library(
+  name = "v8",
+  srcs = glob([
+    "src/**/*.cc",
+    "include/**/*.cc",
+    "out.gn/x64.release/gen/extras-libraries.cc",
+  ]),
+  hdrs = glob([
+    "base/**/*.h",
+    "src/**/*.h",
+    "include/**/*.h",
+    "testing/gtest/include/gtest/*.h",
+    "tools/release/testdata/v8/third_party/googletest/src/googletest/include/gtest/*.h",
+    "out.gn/x64.release/gen/**/*.h"
+  ]),
+  copts = [
+    "-std=c++11"
+  ],
+  includes = [
+    "tools/release/testdata/v8",
+    "include",
+    "testing",
+    "base",
+    "src",
+    "src/base/trace_event/common",
+    "out.gn/x64.release/gen",
+  ],
+  visibility = ["//visibility:public"]
+)
+  """
+)
+
 load(
     "@com_google_asylo//asylo/bazel:asylo_deps.bzl",
     "asylo_deps",

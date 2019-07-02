@@ -1,6 +1,6 @@
 FROM gcr.io/asylo-framework/asylo:buildenv-v0.4.0
 
-RUN apt-get -y update && apt-get install -y git curl clang-format shellcheck
+RUN apt-get -y update && apt-get install -y git curl clang-format shellcheck bison cdbs flex g++ pkg-config
 
 RUN git --version
 RUN clang-format -version
@@ -13,6 +13,18 @@ RUN curl -L https://github.com/protocolbuffers/protobuf/releases/download/v${PRO
 RUN unzip /tmp/protobuf.zip -d $PROTOBUF_DIR
 ENV PATH "$PROTOBUF_DIR/bin:$PATH"
 RUN protoc --version
+
+# Install depot_tools.
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+ENV PATH $PATH:/depot_tools
+
+# Install Chrome V8 engine.
+ARG V8_VERSION=7.7.99
+RUN fetch v8 && \
+    cd /v8 && \
+    git checkout ${V8_VERSION} && \
+    ./tools/dev/v8gen.py x64.release && \
+    ninja -C out.gn/x64.release
 
 # Install Rust compiler.
 # TODO: We should pin a specific Rust version rather than just installing the current stable.
